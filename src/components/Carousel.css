@@ -1,0 +1,207 @@
+.carousel {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    /* Full viewport height for landing */
+    overflow: hidden;
+    background-color: var(--color-background);
+}
+
+.carousel__container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.carousel__slide {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-2xl);
+    background: radial-gradient(circle at top right, var(--slide-color), transparent 70%);
+}
+
+.slide__content {
+    max-width: 800px;
+    text-align: center;
+    /* Glassmorphism effect */
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    padding: var(--spacing-2xl);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.dark .slide__content {
+    background: rgba(30, 41, 59, 0.8);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.slide__icon-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+    color: var(--slide-color);
+}
+
+.slide__role {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: var(--spacing-sm);
+    color: var(--color-text-muted);
+}
+
+.slide__title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: var(--spacing-md);
+    line-height: 1.2;
+    /* Gradient text */
+    background: linear-gradient(135deg, var(--color-text-main) 0%, var(--slide-color) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.slide__description {
+    font-size: 1.125rem;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-lg);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.slide__benefits {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+    text-align: left;
+}
+
+.slide__benefits li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+    font-size: 0.95rem;
+}
+
+.slide__benefits li::before {
+    content: "✓";
+    color: var(--slide-color);
+    font-weight: bold;
+}
+
+.slide__actions {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+}
+
+/* Arrows */
+.carousel__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    padding: var(--spacing-sm);
+    cursor: pointer;
+    transition: all 0.2s;
+    z-index: 10;
+}
+
+.carousel__arrow:hover {
+    background: white;
+    box-shadow: var(--shadow-md);
+}
+
+.carousel__arrow--left {
+    left: var(--spacing-lg);
+}
+
+.carousel__arrow--right {
+    right: var(--spacing-lg);
+}
+
+/* Indicators */
+.carousel__indicators {
+    position: absolute;
+    bottom: var(--spacing-xl);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.carousel__indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.carousel__indicator.active {
+    background: var(--color-primary);
+    transform: scale(1.2);
+}
+
+@media (max-width: 768px) {
+    .slide__title {
+        font-size: 1.75rem;
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .slide__description {
+        font-size: 1rem;
+        padding: 0 var(--spacing-sm);
+    }
+
+    /* Adjust grid for benefits to be more compact on mobile */
+    .slide__benefits {
+        grid-template-columns: 1fr;
+        /* Stack vertically on mobile */
+        gap: var(--spacing-xs);
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .slide__benefits li {
+        font-size: 0.9rem;
+    }
+
+    .slide__content {
+        padding: var(--spacing-lg);
+        margin: 0;
+        width: 100%;
+        max-width: 100%;
+        max-height: 85vh;
+        /* Prevent overflow on small heights */
+        overflow-y: auto;
+        /* Allow scrolling content if it's too tall */
+    }
+
+    .carousel__arrow {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .carousel__slide {
+        padding: var(--spacing-sm);
+    }
+
+    .slide__title {
+        font-size: 1.5rem;
+    }
+}
