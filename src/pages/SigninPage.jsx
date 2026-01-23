@@ -23,22 +23,51 @@ const SigninPage = () => {
         setLoading(true);
 
         // Simulate API call
+        // Simulate API call
         setTimeout(() => {
-            // Mock login - strictly for demo
-            // In real app, we would get role from backend response
-            // For now, let's assume if they login they were a customer unless specified otherwise
-            // But actually, the requirement says "Post-Login Redirection Logic ... System automatically detects".
-            // Since we don't have a backend, I will hardcode a demo logic or just pick a random role/default role.
-            // Let's make a mock user for now.
+            // Default Credentials Logic
+            // Password must be 'Dedust!23' for these specific accounts
+            if (formData.password !== 'Dedust!23') {
+                alert('Invalid credentials');
+                setLoading(false);
+                return;
+            }
+
+            let role = 'Customer'; // Default
+            let subRole = null;
+            const email = formData.identifier.toLowerCase();
+
+            const userMap = {
+                'superadmin@goatfarmpro.com': { role: 'Super Admin' },
+                'farm@goatfarmpro.com': { role: 'Farm Owner' },
+                'trader@goatfarmpro.com': { role: 'Trader' },
+                'butcher@goatfarmpro.com': { role: 'Butcher' },
+                'supervisor@goatfarmpro.com': { role: 'Employee', subRole: 'supervisor' },
+                'worker@goatfarmpro.com': { role: 'Employee', subRole: 'worker' },
+                'guard@goatfarmpro.com': { role: 'Employee', subRole: 'guard' },
+                'customer@goatfarmpro.com': { role: 'Customer' }
+            };
+
+            const matchedUser = userMap[email];
+
+            if (matchedUser) {
+                role = matchedUser.role;
+                subRole = matchedUser.subRole;
+            } else {
+                // strict check: if not in list, fail or just default? 
+                // "create default login... for user... with default password" implies strictness or at least priority.
+                // If the user types random email + Dedust!23, we could let them in as Customer or fail. 
+                // I'll stick to failing or just basic Customer if unknown for now to allow generic testing if needed, 
+                // BUT given the prompt, ensuring these specific ones work is key. 
+                // Let's allow generic login as Customer for other emails if password matches, 
+                // OR strict. I'll stick to the map mostly but default to Customer.
+            }
 
             const mockUser = {
-                name: 'Demo User',
+                name: email.split('@')[0],
                 email: formData.identifier,
-                role: 'Super Admin' // Defaulting to Customer for generic login
-                // role: 'Farm Owner' // Defaulting to Customer for generic login
-                // role: 'Trader' 
-                // role: 'Butcher' 
-                // role: 'Customer'
+                role: role,
+                subRole: subRole
             };
 
             // navigate to OTP verification instead of direct login

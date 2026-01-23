@@ -96,7 +96,9 @@ const OtpVerificationPage = () => {
                     'Customer': '/dashboard/customer',
                     'Butcher': '/dashboard/butcher',
                     'Farm Owner': '/dashboard/farm-owner',
-                    'Trader': '/dashboard/trader'
+                    'Trader': '/dashboard/trader',
+                    'Super Admin': '/dashboard/super-admin',
+                    'Employee': '/dashboard/employee'
                 };
 
                 const targetPath = rolePathMap[pendingUser.role] || '/dashboard';
