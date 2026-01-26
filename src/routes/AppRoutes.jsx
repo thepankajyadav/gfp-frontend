@@ -20,6 +20,7 @@ import EmployeePage from '../pages/EmployeePage';
 import BreedingPage from '../pages/BreedingPage';
 import LocationPage from '../pages/LocationPage';
 import AnimalDetailsPage from '../pages/AnimalDetailsPage';
+import ComingSoonPage from '../pages/ComingSoonPage';
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
     const { user, isAuthenticated, loading } = useAuth();
@@ -89,6 +90,21 @@ const AppRoutes = () => {
                         <TraderDashboard />
                     </ProtectedRoute>
                 } />
+
+                {/* Coming Soon Routes */}
+                <Route path="batches" element={<ComingSoonPage />} />
+                <Route path="weight" element={<ComingSoonPage />} />
+                <Route path="matings" element={<ComingSoonPage />} />
+                <Route path="financials" element={<ComingSoonPage />} />
+                <Route path="milk" element={<ComingSoonPage />} />
+                <Route path="reports" element={<ComingSoonPage />} />
+                <Route path="settings" element={<ComingSoonPage />} />
+                <Route path="feed" element={<ComingSoonPage />} />
+                <Route path="purchased" element={<ComingSoonPage />} />
+                <Route path="sold" element={<ComingSoonPage />} />
+                <Route path="search" element={<ComingSoonPage />} />
+                <Route path="order" element={<ComingSoonPage />} />
+                <Route path="cart" element={<ComingSoonPage />} />
             </Route>
 
             {/* Fallback */}

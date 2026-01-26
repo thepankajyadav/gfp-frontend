@@ -36,3 +36,28 @@ export const systemHealthData = {
     email: { status: 'Operational', sent: 1250 },
     sms: { status: 'Operational', sent: 850 },
 };
+
+export const weeklySalesData = [
+    { day: 'Mon', monthly: 20, quarterly: 15, yearly: 5 },
+    { day: 'Tue', monthly: 40, quarterly: 10, yearly: 15 },
+    { day: 'Wed', monthly: 15, quarterly: 25, yearly: 0 },
+    { day: 'Thu', monthly: 28, quarterly: 15, yearly: 5 },
+    { day: 'Fri', monthly: 13, quarterly: 15, yearly: 5 },
+    { day: 'Sat', monthly: 6, quarterly: 15, yearly: 5 },
+    { day: 'Sun', monthly: 60, quarterly: 25, yearly: 20 },
+];
+
+export const subscriptionReportData = [
+    { month: 'Jan', sales: 4000 },
+    { month: 'Feb', sales: 3000 },
+    { month: 'Mar', sales: 2000 },
+    { month: 'Apr', sales: 2780 },
+    { month: 'May', sales: 1890 },
+    { month: 'Jun', sales: 2390 },
+    { month: 'Jul', sales: 3490 },
+    { month: 'Aug', sales: 4200 },
+    { month: 'Sep', sales: 3100 },
+    { month: 'Oct', sales: 2500 },
+    { month: 'Nov', sales: 3800 },
+    { month: 'Dec', sales: 4100 },
+];

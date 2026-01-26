@@ -23,6 +23,9 @@
   --color-text-inverted: #FFFFFF;
 
   --color-border: #E6E6E6;
+  --color-warning: #f1c21b;
+  --color-danger: #fa4d56;
+  --color-danger-hover: #da1e28;
 
   /* Role Colors - Adjusted to harmonize with new palette but keep distinction */
   --color-role-customer: #44576D;

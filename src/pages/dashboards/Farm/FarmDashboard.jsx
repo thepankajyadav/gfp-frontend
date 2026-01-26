@@ -5,7 +5,6 @@ import {
     HealthAlerts,
     EmployeeSnapshot,
     InventorySnapshot,
-    SubscriptionCard,
     RecentActivities
 } from './components/FarmComponents';
 import {
@@ -14,7 +13,6 @@ import {
     healthAlerts,
     employeeSnapshot,
     inventorySnapshot,
-    subscriptionStatus,
     recentFarmActivities
 } from '../../../data/farmData';
 
@@ -43,8 +41,7 @@ const FarmDashboard = () => {
             {/* 5. Recent Activities */}
             <RecentActivities data={recentFarmActivities} />
 
-            {/* 6. Subscription Status */}
-            <SubscriptionCard data={subscriptionStatus} />
+
         </div>
     );
 };

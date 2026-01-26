@@ -58,7 +58,7 @@ const MENU_ITEMS = {
                 icon: FileText,
                 submenu: ['Daily', 'Weekly', 'Monthly', 'Quarterly', 'Yearly']
             },
-            { id: 'settings', label: 'Farm Settings', icon: Settings },
+            { id: 'settings', label: 'Farm Settings', icon: Settings, path: '/dashboard/settings' },
         ],
         'Farm Owner': [
             { id: 'locations', label: 'Locations', icon: MapPin, path: '/dashboard/locations' },
@@ -77,7 +77,7 @@ const MENU_ITEMS = {
                 icon: FileText,
                 submenu: ['Daily', 'Weekly', 'Monthly', 'Quarterly', 'Yearly']
             },
-            { id: 'settings', label: 'Farm Settings', icon: Settings },
+            { id: 'settings', label: 'Farm Settings', icon: Settings, path: '/dashboard/settings' },
         ],
         'Trader': [
             { id: 'locations', label: 'Locations', icon: MapPin, path: '/dashboard/locations' },
@@ -93,7 +93,7 @@ const MENU_ITEMS = {
                 submenu: ['Daily', 'Weekly', 'Monthly', 'Quarterly', 'Yearly']
             },
             { id: 'milk', label: 'Milk Records', icon: Milk, path: '/dashboard/milk' },
-            { id: 'settings', label: 'Farm Settings', icon: Settings },
+            { id: 'settings', label: 'Farm Settings', icon: Settings, path: '/dashboard/settings' },
         ],
         'Employee': [
             { id: 'feed', label: 'Feed', icon: ShoppingBag, path: '/dashboard/feed' }, // Using Bag as placeholder for Feed
@@ -199,12 +199,32 @@ const UserProfile = ({ user, userRole, onSignOut, isMobile }) => {
                 onClick={() => setIsOpen(!isOpen)}
                 style={isMobile ? { padding: 'var(--spacing-md) 0' } : undefined}
             >
-                <div className="profile-pic">
-                    {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                <div className="profile-pic" style={{ backgroundColor: 'var(--color-primary)', color: 'white' }}>
+                    {userRole ? userRole.charAt(0).toUpperCase() : 'U'}
                 </div>
-                <div className="profile-info">
-                    <div className="profile-name">You</div>
-                    <div className="profile-role">{userRole}</div>
+                <div className="profile-info" style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                        <div className="profile-name" style={{ lineHeight: '1.2', fontWeight: '600' }}>{userRole}</div>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', lineHeight: '1.2' }}>Free</div>
+                    </div>
+                    <div
+                        style={{
+                            fontSize: '0.75rem',
+                            color: 'var(--color-warning)',
+                            fontWeight: 'bold',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.25rem',
+                            cursor: 'pointer',
+                            paddingLeft: '0.5rem'
+                        }}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            navigate('/dashboard/settings');
+                        }}
+                    >
+                        Upgrade
+                    </div>
                 </div>
             </div>
 
@@ -264,13 +284,27 @@ const DashboardLayout = () => {
 
     return (
         <div className="dashboard-layout">
-            {/* Mobile Header */}
-            <header className="mobile-header">
-                <div className="logo-area">GoatFarmPRO</div>
-                <button className="toggle-btn" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-                    {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-                </button>
-            </header>
+            {/* Floating Mobile Toggle */}
+            <button
+                className="toggle-btn d-md-none"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                style={{
+                    position: 'absolute',
+                    top: '0.5rem',
+                    left: '0.5rem',
+                    zIndex: 50,
+                    background: 'var(--color-surface)',
+                    padding: '0.5rem',
+                    borderRadius: 'var(--radius-full)',
+                    boxShadow: 'var(--shadow-md)',
+                    border: '1px solid var(--color-border)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+            >
+                {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
 
             {/* Mobile Menu Overlay */}
             <div className={`mobile-menu-overlay ${mobileMenuOpen ? 'open' : ''}`}>
@@ -303,12 +337,10 @@ const DashboardLayout = () => {
                 <UserProfile user={user} userRole={userRole} onSignOut={handleSignOut} isMobile={false} />
             </div>
 
-            <main className="main-content">
-                {/* 
-                    This Outlet will render the child routes (the specific dashboard pages).
-                    Ensure Route logic wraps these pages in this Layout.
-                */}
-                <Outlet />
+            <main className="main-content" style={{ display: 'flex', flexDirection: 'column', padding: 0 }}>
+                <div className="content-area" style={{ flex: 1, overflowY: 'auto' }}>
+                    <Outlet />
+                </div>
             </main>
 
             {/* Mobile Overlay */}

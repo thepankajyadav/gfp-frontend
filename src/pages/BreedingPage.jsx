@@ -23,7 +23,7 @@ const BreedingPage = () => {
                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                         <thead>
                             <tr style={{ borderBottom: '2px solid var(--color-border)' }}>
-                                <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Male Tag</th>
+                                <th className="sticky-col" style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Male Tag</th>
                                 <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Female Tag</th>
                                 <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Date</th>
                                 <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Status</th>
@@ -32,7 +32,7 @@ const BreedingPage = () => {
                         <tbody>
                             {DUMMY_BREEDING.map((record) => (
                                 <tr key={record.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
-                                    <td style={{ padding: '0.75rem', color: 'var(--color-text-main)', fontWeight: '500' }}>{record.maleTag}</td>
+                                    <td className="sticky-col" style={{ padding: '0.75rem', color: 'var(--color-text-main)', fontWeight: '500' }}>{record.maleTag}</td>
                                     <td style={{ padding: '0.75rem', color: 'var(--color-text-main)' }}>{record.femaleTag}</td>
                                     <td style={{ padding: '0.75rem', color: 'var(--color-text-main)' }}>{record.date}</td>
                                     <td style={{ padding: '0.75rem' }}>

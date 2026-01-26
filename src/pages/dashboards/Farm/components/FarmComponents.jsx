@@ -6,7 +6,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recha
 export const FarmKPIs = ({ data }) => (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem' }}>
         {data.map((item, index) => (
-            <Card key={index}>
+            <Card key={index} hoverable={true}>
                 <h4 style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>{item.label}</h4>
                 <div style={{ fontSize: '1.8rem', fontWeight: 'bold', margin: '0.5rem 0' }}>{item.value}</div>
                 <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{item.sub}</div>
@@ -16,7 +16,7 @@ export const FarmKPIs = ({ data }) => (
 );
 
 export const AnimalStatusChart = ({ data }) => (
-    <Card style={{ height: '300px' }}>
+    <Card style={{ height: '300px' }} hoverable={true}>
         <h3>Animal Status</h3>
         <ResponsiveContainer width="100%" height="100%">
             <PieChart>
@@ -31,7 +31,7 @@ export const AnimalStatusChart = ({ data }) => (
 );
 
 export const HealthAlerts = ({ data }) => (
-    <Card>
+    <Card hoverable={true}>
         <h3>Health & Vaccination Alerts</h3>
         <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             {data.map((alert) => (
@@ -53,7 +53,7 @@ export const HealthAlerts = ({ data }) => (
 );
 
 export const EmployeeSnapshot = ({ data }) => (
-    <Card>
+    <Card hoverable={true}>
         <h3>Employee Snapshot</h3>
         <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', marginTop: '1rem' }}>
             <div style={{ textAlign: 'center' }}>
@@ -73,7 +73,7 @@ export const EmployeeSnapshot = ({ data }) => (
 );
 
 export const InventorySnapshot = ({ data }) => (
-    <Card>
+    <Card hoverable={true}>
         <h3>Inventory Alerts</h3>
         <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             {data.map((item, index) => (
@@ -108,7 +108,7 @@ export const SubscriptionCard = ({ data }) => (
 );
 
 export const RecentActivities = ({ data }) => (
-    <Card>
+    <Card hoverable={true}>
         <h3>Recent Activities</h3>
         <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             {data.map(activity => (

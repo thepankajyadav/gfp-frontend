@@ -23,7 +23,7 @@ const BreedPage = () => {
                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                         <thead>
                             <tr style={{ borderBottom: '2px solid var(--color-border)' }}>
-                                <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Breed Name</th>
+                                <th className="sticky-col" style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Breed Name</th>
                                 <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Description</th>
                                 <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Origin</th>
                                 <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Count</th>
@@ -32,7 +32,7 @@ const BreedPage = () => {
                         <tbody>
                             {DUMMY_BREEDS.map((breed) => (
                                 <tr key={breed.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
-                                    <td style={{ padding: '0.75rem', color: 'var(--color-text-main)', fontWeight: '500' }}>{breed.name}</td>
+                                    <td className="sticky-col" style={{ padding: '0.75rem', color: 'var(--color-text-main)', fontWeight: '500' }}>{breed.name}</td>
                                     <td style={{ padding: '0.75rem', color: 'var(--color-text-main)' }}>{breed.description}</td>
                                     <td style={{ padding: '0.75rem', color: 'var(--color-text-main)' }}>{breed.origin}</td>
                                     <td style={{ padding: '0.75rem', color: 'var(--color-text-main)' }}>{breed.count}</td>

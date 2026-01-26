@@ -84,10 +84,13 @@ const AnimalsPage = () => {
                             variant="primary"
                             onClick={handleDelete}
                             style={{
-                                backgroundColor: '#dc2626',
-                                borderColor: '#dc2626',
-                                color: 'white'
+                                backgroundColor: 'var(--color-danger)',
+                                borderColor: 'var(--color-danger)',
+                                color: 'white',
+                                transition: 'background-color 0.2s'
                             }}
+                            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--color-danger-hover)'; e.currentTarget.style.borderColor = 'var(--color-danger-hover)'; }}
+                            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'var(--color-danger)'; e.currentTarget.style.borderColor = 'var(--color-danger)'; }}
                         >
                             Delete ({selectedIds.length})
                         </Button>
@@ -104,7 +107,7 @@ const AnimalsPage = () => {
                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                         <thead>
                             <tr style={{ borderBottom: '2px solid var(--color-border)' }}>
-                                <th style={{ padding: '0.75rem', textAlign: 'left' }}>
+                                <th className="sticky-col" style={{ padding: '0.75rem', textAlign: 'left', left: 0, minWidth: '50px', width: '50px' }}>
                                     <input
                                         type="checkbox"
                                         checked={selectedIds.length === animals.length && animals.length > 0}
@@ -112,7 +115,7 @@ const AnimalsPage = () => {
                                         style={{ cursor: 'pointer' }}
                                     />
                                 </th>
-                                <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Tag ID</th>
+                                <th className="sticky-col" style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)', left: '50px' }}>Tag ID</th>
                                 <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Breed</th>
                                 <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Gender</th>
                                 <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Status</th>
@@ -135,7 +138,7 @@ const AnimalsPage = () => {
                                         cursor: 'pointer'
                                     }}
                                 >
-                                    <td style={{ padding: '0.75rem' }}>
+                                    <td className="sticky-col" style={{ padding: '0.75rem', left: 0, minWidth: '50px', width: '50px', backgroundColor: selectedIds.includes(animal.id) ? '#e6f0f5' : 'var(--color-surface)' }}>
                                         <input
                                             type="checkbox"
                                             checked={selectedIds.includes(animal.id)}
@@ -143,7 +146,7 @@ const AnimalsPage = () => {
                                             style={{ cursor: 'pointer' }}
                                         />
                                     </td>
-                                    <td style={{ padding: '0.75rem', color: 'var(--color-text-main)', fontWeight: '500' }}>{animal.tagId}</td>
+                                    <td className="sticky-col" style={{ padding: '0.75rem', color: 'var(--color-text-main)', fontWeight: '500', left: '50px', backgroundColor: selectedIds.includes(animal.id) ? '#e6f0f5' : 'var(--color-surface)' }}>{animal.tagId}</td>
                                     <td style={{ padding: '0.75rem', color: 'var(--color-text-main)' }}>{animal.breed}</td>
                                     <td style={{ padding: '0.75rem', color: 'var(--color-text-main)' }}>{animal.gender}</td>
                                     <td style={{ padding: '0.75rem' }}>

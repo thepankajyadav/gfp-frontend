@@ -24,7 +24,7 @@ const MedicinePage = () => {
                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                         <thead>
                             <tr style={{ borderBottom: '2px solid var(--color-border)' }}>
-                                <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Medicine Name</th>
+                                <th className="sticky-col" style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Medicine Name</th>
                                 <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Type</th>
                                 <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Quantity</th>
                                 <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Expiry Date</th>
@@ -33,7 +33,7 @@ const MedicinePage = () => {
                         <tbody>
                             {DUMMY_MEDICINES.map((medicine) => (
                                 <tr key={medicine.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
-                                    <td style={{ padding: '0.75rem', color: 'var(--color-text-main)', fontWeight: '500' }}>{medicine.name}</td>
+                                    <td className="sticky-col" style={{ padding: '0.75rem', color: 'var(--color-text-main)', fontWeight: '500' }}>{medicine.name}</td>
                                     <td style={{ padding: '0.75rem', color: 'var(--color-text-main)' }}>{medicine.type}</td>
                                     <td style={{ padding: '0.75rem', color: 'var(--color-text-main)' }}>{medicine.quantity}</td>
                                     <td style={{ padding: '0.75rem', color: 'var(--color-text-main)' }}>{medicine.expiryDate}</td>

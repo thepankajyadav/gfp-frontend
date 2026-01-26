@@ -24,7 +24,7 @@ const VaccinesPage = () => {
                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                         <thead>
                             <tr style={{ borderBottom: '2px solid var(--color-border)' }}>
-                                <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Animal Tag</th>
+                                <th className="sticky-col" style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Animal Tag</th>
                                 <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Vaccine Name</th>
                                 <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Date Given</th>
                                 <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Next Due</th>
@@ -33,7 +33,7 @@ const VaccinesPage = () => {
                         <tbody>
                             {DUMMY_VACCINES.map((vaccine) => (
                                 <tr key={vaccine.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
-                                    <td style={{ padding: '0.75rem', color: 'var(--color-text-main)', fontWeight: '500' }}>{vaccine.animalTag}</td>
+                                    <td className="sticky-col" style={{ padding: '0.75rem', color: 'var(--color-text-main)', fontWeight: '500' }}>{vaccine.animalTag}</td>
                                     <td style={{ padding: '0.75rem', color: 'var(--color-text-main)' }}>{vaccine.vaccineName}</td>
                                     <td style={{ padding: '0.75rem', color: 'var(--color-text-main)' }}>{vaccine.date}</td>
                                     <td style={{ padding: '0.75rem', color: 'var(--color-text-main)' }}>{vaccine.nextDue}</td>

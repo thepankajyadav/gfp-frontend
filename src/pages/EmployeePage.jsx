@@ -23,7 +23,7 @@ const EmployeePage = () => {
                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                         <thead>
                             <tr style={{ borderBottom: '2px solid var(--color-border)' }}>
-                                <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Name</th>
+                                <th className="sticky-col" style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Name</th>
                                 <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Role</th>
                                 <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Phone</th>
                                 <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Join Date</th>
@@ -32,7 +32,7 @@ const EmployeePage = () => {
                         <tbody>
                             {DUMMY_EMPLOYEES.map((employee) => (
                                 <tr key={employee.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
-                                    <td style={{ padding: '0.75rem', color: 'var(--color-text-main)', fontWeight: '500' }}>{employee.name}</td>
+                                    <td className="sticky-col" style={{ padding: '0.75rem', color: 'var(--color-text-main)', fontWeight: '500' }}>{employee.name}</td>
                                     <td style={{ padding: '0.75rem', color: 'var(--color-text-main)' }}>{employee.role}</td>
                                     <td style={{ padding: '0.75rem', color: 'var(--color-text-main)' }}>{employee.phone}</td>
                                     <td style={{ padding: '0.75rem', color: 'var(--color-text-main)' }}>{employee.joinDate}</td>

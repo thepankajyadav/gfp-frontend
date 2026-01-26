@@ -23,7 +23,7 @@ const LocationPage = () => {
                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                         <thead>
                             <tr style={{ borderBottom: '2px solid var(--color-border)' }}>
-                                <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Location Name</th>
+                                <th className="sticky-col" style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Location Name</th>
                                 <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Location Type</th>
                                 <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Date</th>
                                 <th style={{ padding: '0.75rem', textAlign: 'left', fontWeight: '600', color: 'var(--color-text-main)' }}>Status</th>
@@ -32,7 +32,7 @@ const LocationPage = () => {
                         <tbody>
                             {DUMMY_LOCATION.map((record) => (
                                 <tr key={record.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
-                                    <td style={{ padding: '0.75rem', color: 'var(--color-text-main)', fontWeight: '500' }}>{record.locationName}</td>
+                                    <td className="sticky-col" style={{ padding: '0.75rem', color: 'var(--color-text-main)', fontWeight: '500' }}>{record.locationName}</td>
                                     <td style={{ padding: '0.75rem', color: 'var(--color-text-main)' }}>{record.locationCode}</td>
                                     <td style={{ padding: '0.75rem', color: 'var(--color-text-main)' }}>{record.Purpose}</td>
                                     <td style={{ padding: '0.75rem' }}>
