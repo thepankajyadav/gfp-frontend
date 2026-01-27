@@ -2,20 +2,24 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Menu, ChevronDown, ChevronRight, X, LogOut, User, Lock, Settings } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import './Dashboard.css'; // We'll keep using Dashboard.css for now or refactor later
+import './Dashboard.css';
 
-const SidebarItem = ({ item, collapsed }) => {
+const SidebarItem = ({ item, collapsed, onItemClick }) => {
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
     const hasSubmenu = item.submenu && item.submenu.length > 0;
 
-    const toggleSubmenu = () => setIsOpen(!isOpen);
+    const toggleSubmenu = (e) => {
+        e.stopPropagation();
+        setIsOpen(!isOpen);
+    };
 
     const handleClick = () => {
         if (hasSubmenu) {
-            toggleSubmenu();
+            setIsOpen(!isOpen);
         } else if (item.path) {
             navigate(item.path);
+            if (onItemClick) onItemClick();
         }
     };
 
@@ -45,7 +49,11 @@ const SidebarItem = ({ item, collapsed }) => {
             {hasSubmenu && isOpen && !collapsed && (
                 <div className="submenu">
                     {item.submenu.map((sub, idx) => (
-                        <div key={idx} className="menu-item submenu-item">
+                        <div key={idx} className="menu-item submenu-item" onClick={(e) => {
+                            e.stopPropagation();
+                            // Handle submenu click logic (nav?)
+                            if (onItemClick) onItemClick();
+                        }}>
                             <span>{sub}</span>
                         </div>
                     ))}
@@ -55,13 +63,14 @@ const SidebarItem = ({ item, collapsed }) => {
     );
 };
 
-const UserProfile = ({ user, userRole, onSignOut, collapsed }) => {
+const UserProfile = ({ user, userRole, onSignOut, collapsed, onItemClick }) => {
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
 
     const handleNavigation = (path) => {
         navigate(path);
         setIsOpen(false);
+        if (onItemClick) onItemClick();
     };
 
     if (collapsed) {
@@ -84,12 +93,7 @@ const UserProfile = ({ user, userRole, onSignOut, collapsed }) => {
                     <div className="profile-name">{userRole}</div>
                     <div className="profile-role">Free Plan</div>
                 </div>
-                <div className="upgrade-btn" onClick={(e) => {
-                    e.stopPropagation();
-                    navigate('/dashboard/settings');
-                }}>
-                    Upgrade
-                </div>
+                {/* Upgrade logic could go here */}
             </div>
 
             {isOpen && (
@@ -100,7 +104,7 @@ const UserProfile = ({ user, userRole, onSignOut, collapsed }) => {
                     <div className="popup-item" onClick={() => handleNavigation('/dashboard/change-password')}>
                         <Lock size={16} /> Change Password
                     </div>
-                    <div className="popup-item danger" onClick={onSignOut}>
+                    <div className="popup-item danger" onClick={() => { onSignOut(); if (onItemClick) onItemClick(); }}>
                         <LogOut size={16} /> SIGN OUT
                     </div>
                 </div>
@@ -120,23 +124,12 @@ const Sidebar = ({
     setMobileOpen
 }) => {
 
-    // Custom Hamburger Icon with middle bar longer
-    const HamburgerIcon = () => (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="12" x2="21" y2="12" style={{ strokeWidth: 3 }}></line> {/* Emulate longer/thicker or just longer visually if not full width? User said "middle bar is slightly longer". Standard icons are equal. Let's make top/bottom shorter? */}
-            {/* Actually user said "middle bar is slightly longer than the top and bottom bars". */}
-            {/* Let's try drawing it manually to be safe */}
-        </svg>
-    );
-
-    const CustomHamburger = () => (
-        <div className="custom-hamburger">
-            <div className="bar top"></div>
-            <div className="bar middle"></div>
-            <div className="bar bottom"></div>
-        </div>
-    );
+    // Helper to close sidebar on mobile when an item is clicked
+    const handleMobileItemClick = () => {
+        if (window.innerWidth < 768) {
+            setMobileOpen(false);
+        }
+    };
 
     return (
         <>
@@ -149,25 +142,18 @@ const Sidebar = ({
             <aside className={`sidebar ${collapsed ? 'collapsed' : ''} ${mobileOpen ? 'mobile-open' : ''}`}>
                 <div className="sidebar-header">
                     {!collapsed && <div className="logo-area">GoatFarmPRO</div>}
-                    <button
-                        className="toggle-btn"
-                        onClick={() => {
-                            if (window.innerWidth < 768) {
-                                setMobileOpen(false);
-                            } else {
-                                setCollapsed(!collapsed);
-                            }
-                        }}
-                    >
-                        {/* We use the custom hamburger in the TopBar usually, but here in sidebar it might be a close icon or the same toggle */}
-                        {window.innerWidth < 768 ? <X size={20} /> : (collapsed ? <Menu size={20} /> : <CustomHamburger />)}
-                    </button>
+                    {/* Removed Hamburger from here as requested */}
                 </div>
 
                 <div className="sidebar-content">
                     <div className="menu-group">
                         {menuItems.map(item => (
-                            <SidebarItem key={item.id} item={item} collapsed={collapsed} />
+                            <SidebarItem
+                                key={item.id}
+                                item={item}
+                                collapsed={collapsed}
+                                onItemClick={handleMobileItemClick}
+                            />
                         ))}
                     </div>
                 </div>
@@ -177,6 +163,7 @@ const Sidebar = ({
                     userRole={userRole}
                     onSignOut={onSignOut}
                     collapsed={collapsed}
+                    onItemClick={handleMobileItemClick}
                 />
             </aside>
         </>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Bell, Settings, User, ChevronRight, Menu, LogOut, Lock } from 'lucide-react';
+import { Bell, Settings, User, ChevronRight, Menu, LogOut, Lock, X } from 'lucide-react';
 import NotificationPopup from './NotificationPopup';
 
 // Mock Notifications
@@ -10,7 +10,7 @@ const MOCK_NOTIFICATIONS = [
     { id: 3, title: 'Compliance', message: 'Veterinary certificate expiring soon', time: '2 hrs ago', read: true },
 ];
 
-const TopBar = ({ user, userRole, toggleSidebar, scrolled, onSignOut }) => {
+const TopBar = ({ user, userRole, toggleSidebar, scrolled, onSignOut, collapsed }) => {
     const location = useLocation();
     const navigate = useNavigate();
     const [showNotifications, setShowNotifications] = useState(false);
@@ -28,7 +28,7 @@ const TopBar = ({ user, userRole, toggleSidebar, scrolled, onSignOut }) => {
             className={`topbar ${scrolled ? 'scrolled' : ''}`}
             style={{
                 height: '64px',
-                transition: 'all 0.3s ease',
+                transition: 'background-color 0.3s ease, box-shadow 0.3s ease',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
@@ -36,33 +36,14 @@ const TopBar = ({ user, userRole, toggleSidebar, scrolled, onSignOut }) => {
                 position: 'sticky',
                 top: 0,
                 zIndex: 40,
-                backgroundColor: scrolled ? 'rgba(255, 255, 255, 0.9)' : 'transparent',
+                backgroundColor: scrolled ? 'rgba(255, 255, 255, 0.95)' : 'transparent',
                 backdropFilter: scrolled ? 'blur(10px)' : 'none',
                 boxShadow: scrolled ? 'var(--shadow-sm)' : 'none',
-                margin: scrolled ? '0.5rem 1rem 0' : '0', // Floating effect
-                borderRadius: scrolled ? 'var(--radius-lg)' : '0',
-                width: scrolled ? 'calc(100% - 2rem)' : '100%',
+                width: '100%', // Full width always
             }}
         >
-            {/* Breadcrumbs / Mobile Toggle */}
+            {/* Breadcrumbs */}
             <div style={{ display: 'flex', alignItems: 'center', color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
-                {/* Mobile Menu Toggle */}
-                <button
-                    onClick={toggleSidebar}
-                    className="d-md-none" // Hide on desktop
-                    style={{
-                        background: 'none',
-                        border: 'none',
-                        marginRight: '1rem',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        color: 'var(--color-text-main)'
-                    }}
-                >
-                    <Menu size={24} />
-                </button>
-
                 <div className="breadcrumbs" style={{ display: 'flex', alignItems: 'center' }}>
                     {pathnames.map((value, index) => {
                         const isLast = index === pathnames.length - 1;
@@ -82,7 +63,7 @@ const TopBar = ({ user, userRole, toggleSidebar, scrolled, onSignOut }) => {
                 </div>
             </div>
 
-            {/* Right: Actions */}
+            {/* Right: Actions & Hamburger */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
 
                 {/* Notification Bell */}
@@ -111,7 +92,7 @@ const TopBar = ({ user, userRole, toggleSidebar, scrolled, onSignOut }) => {
                                 position: 'absolute',
                                 top: '4px',
                                 right: '4px',
-                                backgroundColor: 'var(--color-danger)',
+                                backgroundColor: '#fa4d56', // Primary Red
                                 color: 'white',
                                 fontSize: '0.6rem',
                                 borderRadius: '50%',
@@ -128,9 +109,6 @@ const TopBar = ({ user, userRole, toggleSidebar, scrolled, onSignOut }) => {
                     </button>
                     {showNotifications && (
                         <div className="dropdown-menu">
-                            {/* Reusing existing popup logic or embedding it structure here for consistent style? 
-                                Let's assume NotificationPopup is stylable or we wrap it 
-                            */}
                             <NotificationPopup
                                 notifications={MOCK_NOTIFICATIONS}
                                 onClose={() => setShowNotifications(false)}
@@ -139,8 +117,8 @@ const TopBar = ({ user, userRole, toggleSidebar, scrolled, onSignOut }) => {
                     )}
                 </div>
 
-                {/* Settings */}
-                <div style={{ position: 'relative' }}>
+                {/* Settings - HIDDEN ON MOBILE */}
+                <div className="d-none d-md-block" style={{ position: 'relative' }}>
                     <button
                         onClick={() => {
                             setShowSettings(!showSettings);
@@ -160,19 +138,9 @@ const TopBar = ({ user, userRole, toggleSidebar, scrolled, onSignOut }) => {
                             right: 0,
                             marginTop: '0.5rem',
                             width: '200px',
-                            background: 'white',
-                            borderRadius: 'var(--radius-md)',
-                            boxShadow: 'var(--shadow-lg)',
-                            border: '1px solid var(--color-border)',
-                            padding: '0.5rem',
                             zIndex: 100
                         }}>
-                            <div style={{
-                                position: 'absolute', top: '-6px', right: '12px',
-                                width: '12px', height: '12px',
-                                background: 'white', transform: 'rotate(45deg)',
-                                borderTop: '1px solid var(--color-border)', borderLeft: '1px solid var(--color-border)'
-                            }}></div>
+                            <div className="dropdown-arrow"></div>
                             <div className="popup-item" onClick={() => navigate('/dashboard/settings')}>
                                 <Settings size={16} /> Farm Settings
                             </div>
@@ -213,19 +181,9 @@ const TopBar = ({ user, userRole, toggleSidebar, scrolled, onSignOut }) => {
                             right: 0,
                             marginTop: '0.5rem',
                             width: '200px',
-                            background: 'white',
-                            borderRadius: 'var(--radius-md)',
-                            boxShadow: 'var(--shadow-lg)',
-                            border: '1px solid var(--color-border)',
-                            padding: '0.5rem',
                             zIndex: 100
                         }}>
-                            <div style={{
-                                position: 'absolute', top: '-6px', right: '12px',
-                                width: '12px', height: '12px',
-                                background: 'white', transform: 'rotate(45deg)',
-                                borderTop: '1px solid var(--color-border)', borderLeft: '1px solid var(--color-border)'
-                            }}></div>
+                            <div className="dropdown-arrow"></div>
                             <div className="popup-item" onClick={() => navigate('/dashboard/profile')}>
                                 <User size={16} /> Profile
                             </div>
@@ -238,6 +196,24 @@ const TopBar = ({ user, userRole, toggleSidebar, scrolled, onSignOut }) => {
                         </div>
                     )}
                 </div>
+
+                {/* Unified Hamburger (Top Right) */}
+                <button
+                    onClick={toggleSidebar}
+                    style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        padding: '0.5rem',
+                        marginLeft: '0.5rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'var(--color-text-main)'
+                    }}
+                >
+                    <Menu size={24} />
+                </button>
             </div>
         </header>
     );

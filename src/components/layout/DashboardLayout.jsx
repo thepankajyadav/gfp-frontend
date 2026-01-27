@@ -152,6 +152,14 @@ const DashboardLayout = () => {
         }
     };
 
+    const handleGlobalToggle = () => {
+        if (window.innerWidth < 768) {
+            setMobileOpen(!mobileOpen);
+        } else {
+            setCollapsed(!collapsed);
+        }
+    };
+
     return (
         <div className="dashboard-layout">
             <Sidebar
@@ -169,9 +177,10 @@ const DashboardLayout = () => {
                 <TopBar
                     user={user}
                     userRole={userRole}
-                    toggleSidebar={() => setMobileOpen(true)}
+                    toggleSidebar={handleGlobalToggle}
                     scrolled={scrolled}
                     onSignOut={handleSignOut}
+                    collapsed={collapsed}
                 />
 
                 <div
