@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, useLocation, Outlet } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Icons from '../../components/ui/Icons';
 import {
@@ -22,15 +22,10 @@ import {
     ShoppingCart,
     Briefcase,
     TrendingUp,
-    ShoppingBag,
-    Menu,
-    X,
-    ChevronDown,
-    ChevronRight,
-    LogOut,
-    User,
-    Lock
+    ShoppingBag
 } from 'lucide-react';
+import Sidebar from './Sidebar';
+import TopBar from './TopBar';
 import './Dashboard.css';
 
 // Menu Configuration
@@ -96,7 +91,7 @@ const MENU_ITEMS = {
             { id: 'settings', label: 'Farm Settings', icon: Settings, path: '/dashboard/settings' },
         ],
         'Employee': [
-            { id: 'feed', label: 'Feed', icon: ShoppingBag, path: '/dashboard/feed' }, // Using Bag as placeholder for Feed
+            { id: 'feed', label: 'Feed', icon: ShoppingBag, path: '/dashboard/feed' },
             { id: 'medicine', label: 'Medicine', icon: Pill, path: '/dashboard/medicine' },
             { id: 'vaccine', label: 'Vaccine', icon: Syringe, path: '/dashboard/vaccines' },
         ],
@@ -118,147 +113,17 @@ const MENU_ITEMS = {
     }
 };
 
-const SidebarItem = ({ item, collapsed }) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const navigate = useNavigate();
-    const hasSubmenu = item.submenu && item.submenu.length > 0;
-
-    const toggleSubmenu = () => setIsOpen(!isOpen);
-
-    const handleClick = () => {
-        if (hasSubmenu) {
-            toggleSubmenu();
-        } else if (item.path) {
-            navigate(item.path);
-        }
-    };
-
-    return (
-        <div className="menu-container">
-            <div
-                className={`menu-item ${isOpen ? 'active' : ''}`}
-                onClick={handleClick}
-                title={collapsed ? item.label : ''}
-                style={{ cursor: item.path || hasSubmenu ? 'pointer' : 'default' }}
-            >
-                <item.icon size={20} />
-                <span className="menu-text">{item.label}</span>
-                {hasSubmenu && !collapsed && (
-                    <span className="chevron-icon" style={{ marginLeft: 'auto' }}>
-                        {isOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-                    </span>
-                )}
-            </div>
-
-            {hasSubmenu && isOpen && !collapsed && (
-                <div className="submenu">
-                    {item.submenu.map((sub, idx) => (
-                        <div key={idx} className="menu-item submenu-item">
-                            <span>{sub}</span>
-                        </div>
-                    ))}
-                </div>
-            )}
-        </div>
-    );
-};
-
-const UserProfile = ({ user, userRole, onSignOut, isMobile }) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const popupRef = useRef(null);
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (popupRef.current && !popupRef.current.contains(event.target)) {
-                setIsOpen(false);
-            }
-        };
-
-        if (isOpen) {
-            document.addEventListener('mousedown', handleClickOutside);
-        }
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [isOpen]);
-
-    const handleNavigation = (path) => {
-        navigate(path);
-        setIsOpen(false);
-    };
-
-    return (
-        <div
-            className="user-profile"
-            ref={popupRef}
-            style={isMobile ? { borderTop: '1px solid var(--color-border)', marginTop: 'auto', position: 'relative' } : undefined}
-        >
-            <div
-                className="profile-trigger"
-                onClick={() => setIsOpen(!isOpen)}
-                style={isMobile ? { padding: 'var(--spacing-md) 0' } : undefined}
-            >
-                <div className="profile-pic" style={{ backgroundColor: 'var(--color-primary)', color: 'white' }}>
-                    {userRole ? userRole.charAt(0).toUpperCase() : 'U'}
-                </div>
-                <div className="profile-info" style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                        <div className="profile-name" style={{ lineHeight: '1.2', fontWeight: '600' }}>{userRole}</div>
-                        <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', lineHeight: '1.2' }}>Free</div>
-                    </div>
-                    <div
-                        style={{
-                            fontSize: '0.75rem',
-                            color: 'var(--color-warning)',
-                            fontWeight: 'bold',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.25rem',
-                            cursor: 'pointer',
-                            paddingLeft: '0.5rem'
-                        }}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            navigate('/dashboard/settings');
-                        }}
-                    >
-                        Upgrade
-                    </div>
-                </div>
-            </div>
-
-            {isOpen && (
-                <div
-                    className="profile-popup"
-                    style={isMobile ? { left: '0', right: '0', bottom: '100%', width: 'auto', marginBottom: '1rem' } : undefined}
-                >
-                    <div className="popup-item" onClick={() => handleNavigation('/dashboard/profile')}>
-                        <User size={16} /> Profile
-                    </div>
-                    <div className="popup-item" onClick={() => handleNavigation('/dashboard/change-password')}>
-                        <Lock size={16} /> Change Password
-                    </div>
-                    <div className="popup-item danger" onClick={onSignOut}>
-                        <LogOut size={16} /> SIGN OUT
-                    </div>
-                </div>
-            )}
-        </div>
-    );
-};
-
 const DashboardLayout = () => {
     const { user, logout } = useAuth();
-    const [collapsed, setCollapsed] = useState(false); // Default expanded
     const navigate = useNavigate();
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-    // Mapping for specific internal role names to menu keys if necessary
-    // Our AuthContext uses role names like "Farm Owner" which matches keys.
+    // State
+    const [collapsed, setCollapsed] = useState(false); // Default expanded
+    const [mobileOpen, setMobileOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
+
+    // Role Logic
     const userRole = user?.role || 'Customer';
-
-    // Map role to dashboard path
     const roleDashboardPath = {
         'Customer': '/dashboard/customer',
         'Butcher': '/dashboard/butcher',
@@ -267,7 +132,6 @@ const DashboardLayout = () => {
         'Super Admin': '/dashboard/super-admin',
     }[userRole] || '/dashboard/customer';
 
-    // Update dashboard menu item path dynamically
     const globalMenuWithDynamicDashboard = MENU_ITEMS.global.map(item =>
         item.id === 'dashboard' ? { ...item, path: roleDashboardPath } : item
     );
@@ -275,82 +139,48 @@ const DashboardLayout = () => {
     const roleMenu = MENU_ITEMS.roles[userRole] || [];
     const allMenuItems = [...globalMenuWithDynamicDashboard, ...roleMenu];
 
-    const toggleSidebar = () => setCollapsed(!collapsed);
-
     const handleSignOut = () => {
         logout();
         navigate('/signin');
     };
 
+    const handleScroll = (e) => {
+        if (e.target.scrollTop > 10) {
+            setScrolled(true);
+        } else {
+            setScrolled(false);
+        }
+    };
+
     return (
         <div className="dashboard-layout">
-            {/* Floating Mobile Toggle */}
-            <button
-                className="toggle-btn d-md-none"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                style={{
-                    position: 'absolute',
-                    top: '0.5rem',
-                    left: '0.5rem',
-                    zIndex: 50,
-                    background: 'var(--color-surface)',
-                    padding: '0.5rem',
-                    borderRadius: 'var(--radius-full)',
-                    boxShadow: 'var(--shadow-md)',
-                    border: '1px solid var(--color-border)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}
-            >
-                {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
+            <Sidebar
+                collapsed={collapsed}
+                setCollapsed={setCollapsed}
+                menuItems={allMenuItems}
+                user={user}
+                userRole={userRole}
+                onSignOut={handleSignOut}
+                mobileOpen={mobileOpen}
+                setMobileOpen={setMobileOpen}
+            />
 
-            {/* Mobile Menu Overlay */}
-            <div className={`mobile-menu-overlay ${mobileMenuOpen ? 'open' : ''}`}>
-                <div className="menu-group">
-                    {allMenuItems.map(item => (
-                        <SidebarItem key={item.id} item={item} collapsed={false} />
-                    ))}
-                </div>
-                <UserProfile user={user} userRole={userRole} onSignOut={handleSignOut} isMobile={true} />
-            </div>
+            <main className="main-content">
+                <TopBar
+                    user={user}
+                    userRole={userRole}
+                    toggleSidebar={() => setMobileOpen(true)}
+                    scrolled={scrolled}
+                    onSignOut={handleSignOut}
+                />
 
-            <div className={`sidebar ${collapsed ? 'collapsed' : 'expanded'}`}>
-                <div className="sidebar-header">
-                    <div className="logo-area">
-                        GoatFarmPRO
-                    </div>
-                    <button className="toggle-btn" onClick={toggleSidebar}>
-                        {collapsed ? <Menu size={20} /> : <X size={20} />}
-                    </button>
-                </div>
-
-                <div className="sidebar-content">
-                    <div className="menu-group">
-                        {allMenuItems.map(item => (
-                            <SidebarItem key={item.id} item={item} collapsed={collapsed} />
-                        ))}
-                    </div>
-                </div>
-
-                <UserProfile user={user} userRole={userRole} onSignOut={handleSignOut} isMobile={false} />
-            </div>
-
-            <main className="main-content" style={{ display: 'flex', flexDirection: 'column', padding: 0 }}>
-                <div className="content-area" style={{ flex: 1, overflowY: 'auto' }}>
+                <div
+                    className="content-scroll-area"
+                    onScroll={handleScroll}
+                >
                     <Outlet />
                 </div>
             </main>
-
-            {/* Mobile Overlay */}
-            {!collapsed && (
-                <div
-                    className="overlay d-md-none" // Bootstrap classes or custom logic needed for mobile hide
-                    style={{ display: 'none' /* Handled by media query in CSS */ }}
-                    onClick={() => setCollapsed(true)}
-                ></div>
-            )}
         </div>
     );
 };
