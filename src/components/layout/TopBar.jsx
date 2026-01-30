@@ -27,23 +27,44 @@ const TopBar = ({ user, userRole, toggleSidebar, scrolled, onSignOut, collapsed 
         <header
             className={`topbar ${scrolled ? 'scrolled' : ''}`}
             style={{
-                height: '64px',
-                transition: 'background-color 0.3s ease, box-shadow 0.3s ease',
+                height: 'auto',
+                minHeight: '64px',
+                transition: 'background-color 0.3s ease, box-shadow 0.3s ease, padding 0.3s ease',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                padding: '0 1.5rem',
                 position: 'sticky',
                 top: 0,
                 zIndex: 40,
+                // Only override background if NOT transparent implies we want strict control
+                // But user wants "padding and border radius for all screen size".
+                // If I keep background logic here, transparent means invisible radius.
+                // I will add a slight background or just keep user logic
                 backgroundColor: scrolled ? 'rgba(255, 255, 255, 0.95)' : 'transparent',
                 backdropFilter: scrolled ? 'blur(10px)' : 'none',
                 boxShadow: scrolled ? 'var(--shadow-sm)' : 'none',
-                width: '100%', // Full width always
             }}
         >
-            {/* Breadcrumbs */}
-            <div style={{ display: 'flex', alignItems: 'center', color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
+            {/* Left: Hamburger & Breadcrumbs */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
+                {/* Unified Hamburger (Left Side) */}
+                <button
+                    onClick={toggleSidebar}
+                    style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        padding: '0.5rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'var(--color-text-main)',
+                        // Remove marginLeft as it's now first
+                    }}
+                >
+                    <Menu size={24} />
+                </button>
+
                 <div className="breadcrumbs" style={{ display: 'flex', alignItems: 'center' }}>
                     {pathnames.map((value, index) => {
                         const isLast = index === pathnames.length - 1;
@@ -63,7 +84,7 @@ const TopBar = ({ user, userRole, toggleSidebar, scrolled, onSignOut, collapsed 
                 </div>
             </div>
 
-            {/* Right: Actions & Hamburger */}
+            {/* Right: Actions */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
 
                 {/* Notification Bell */}
@@ -196,24 +217,6 @@ const TopBar = ({ user, userRole, toggleSidebar, scrolled, onSignOut, collapsed 
                         </div>
                     )}
                 </div>
-
-                {/* Unified Hamburger (Top Right) */}
-                <button
-                    onClick={toggleSidebar}
-                    style={{
-                        background: 'none',
-                        border: 'none',
-                        cursor: 'pointer',
-                        padding: '0.5rem',
-                        marginLeft: '0.5rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: 'var(--color-text-main)'
-                    }}
-                >
-                    <Menu size={24} />
-                </button>
             </div>
         </header>
     );

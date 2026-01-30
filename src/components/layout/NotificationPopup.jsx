@@ -21,15 +21,8 @@ const NotificationPopup = ({ notifications, onClose }) => {
     return (
         <div
             ref={popupRef}
-            className="dropdown-card"
-            style={{
-                position: 'absolute',
-                top: '100%',
-                right: 0,
-                marginTop: '0.8rem', // Space for arrow
-                width: '320px',
-                zIndex: 1000,
-            }}
+            className="dropdown-card notification-popup"
+        // Inline styles removed in favor of CSS class for mobile responsiveness
         >
             <div className="dropdown-arrow"></div>
 

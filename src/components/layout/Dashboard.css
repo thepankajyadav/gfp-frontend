@@ -390,18 +390,7 @@
     position: relative;
 }
 
-.content-scroll-area {
-    flex: 1;
-    overflow-y: auto;
-    padding: 2rem;
-    scroll-behavior: smooth;
-}
 
-@media (max-width: 768px) {
-    .content-scroll-area {
-        padding: 1rem;
-    }
-}
 
 /* --- DROPDOWNS --- */
 .dropdown-card {
@@ -743,12 +732,60 @@
 
     /* Adjust Main Content */
     .main-content {
-        margin-top: 64px;
-        /* Space for fixed header */
         padding: var(--spacing-md);
     }
 
     .dashboard-layout {
         flex-direction: column;
+    }
+
+    .topbar {
+        background-color: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(10px);
+    }
+
+    .breadcrumbs {
+        display: none !important;
+    }
+}
+
+/* Global Topbar Styles */
+.topbar {
+    padding: var(--spacing-md) var(--spacing-lg) !important;
+    border-radius: 15px;
+    /* User requested */
+    margin: var(--spacing-xs);
+    /* Added margin to make radius visible */
+    width: calc(100% - var(--spacing-sm)) !important;
+    /* Adjust width for margin if needed, or leave width 100% and just rely on radius */
+    /* Wait, if I add margin and width 100%, it might overflow. Let's use auto width or calc */
+    width: auto !important;
+}
+
+/* Notification Popup */
+.notification-popup {
+    position: absolute;
+    top: 100%;
+    right: -10px;
+    /* Adjust to align better with edge if needed */
+    margin-top: 0.8rem;
+    width: 320px;
+    z-index: 1000;
+}
+
+@media (max-width: 768px) {
+    .notification-popup {
+        position: fixed;
+        top: 80px;
+        left: var(--spacing-md);
+        right: var(--spacing-md);
+        width: auto !important;
+        margin-top: 0;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    .notification-popup .dropdown-arrow {
+        display: none;
     }
 }

@@ -173,7 +173,7 @@ const DashboardLayout = () => {
                 setMobileOpen={setMobileOpen}
             />
 
-            <main className="main-content">
+            <main className="main-content" onScroll={handleScroll}>
                 <TopBar
                     user={user}
                     userRole={userRole}
@@ -183,12 +183,7 @@ const DashboardLayout = () => {
                     collapsed={collapsed}
                 />
 
-                <div
-                    className="content-scroll-area"
-                    onScroll={handleScroll}
-                >
-                    <Outlet />
-                </div>
+                <Outlet />
             </main>
         </div>
     );
