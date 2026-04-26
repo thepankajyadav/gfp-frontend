@@ -1,8 +1,17 @@
 import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Edit, Trash2, ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
+import AddVaccinationRecordForm from '../components/forms/AddVaccinationRecordForm';
+import AddMedicationRecordForm from '../components/forms/AddMedicationRecordForm';
+import AddWeightRecordForm from '../components/forms/AddWeightRecordForm';
+import AddInsuranceForm from '../components/forms/AddInsuranceForm';
+import AddMatingRecordForm from '../components/forms/AddMatingRecordForm';
+import AddBreedingRecordForm from '../components/forms/AddBreedingRecordForm';
+import AddMilkRecordForm from '../components/forms/AddMilkRecordForm';
+import EditAnimalForm from '../components/forms/EditAnimalForm';
+import ChangeStatusForm from '../components/forms/ChangeStatusForm';
 
 // Mock animal data - in real app, fetch by ID
 const ANIMAL_DATA = {
@@ -65,12 +74,20 @@ const INSURANCE_DATA = {
 };
 
 const AnimalDetailsPage = () => {
-    const { id } = useParams();
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('vaccination');
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-    const animal = ANIMAL_DATA; // In real app: fetch by id
+    const [showAddRecordForm, setShowAddRecordForm] = useState('');
+    const [vaccinationRecords, setVaccinationRecords] = useState(VACCINATION_RECORDS);
+    const [medicationRecords, setMedicationRecords] = useState(MEDICATION_RECORDS);
+    const [weightRecords, setWeightRecords] = useState(WEIGHT_RECORDS);
+    const [insuranceData, setInsuranceData] = useState(INSURANCE_DATA);
+    const [matingRecords, setMatingRecords] = useState(MATING_RECORDS);
+    const [breedingRecords, setBreedingRecords] = useState(BREEDING_RECORDS);
+    const [milkHistory, setMilkHistory] = useState(MILK_HISTORY);
+    const [showEditForm, setShowEditForm] = useState(false);
+    const [showStatusForm, setShowStatusForm] = useState(false);
+    const [animal, setAnimal] = useState(ANIMAL_DATA);
 
     // Gender-based tab filtering
     const allTabs = [
@@ -96,7 +113,7 @@ const AnimalDetailsPage = () => {
     };
 
     const handleEdit = () => {
-        alert('Edit functionality - to be implemented');
+        setShowEditForm(true);
     };
 
     const handleDelete = () => {
@@ -106,11 +123,11 @@ const AnimalDetailsPage = () => {
     };
 
     const handleStatusChange = () => {
-        alert('Change status functionality - to be implemented');
+        setShowStatusForm(true);
     };
 
     const handleAddRecord = (type) => {
-        alert(`Add ${type} functionality - to be implemented`);
+        setShowAddRecordForm(type);
     };
 
     return (
@@ -243,9 +260,9 @@ const AnimalDetailsPage = () => {
                             Change Status
                         </Button>
                         <Button
-                            variant="primary"
+                            variant="danger"
                             onClick={handleDelete}
-                            style={{ backgroundColor: '#dc2626', borderColor: '#dc2626', marginLeft: 'auto' }}
+                            style={{ marginLeft: 'auto' }}
                         >
                             <Trash2 size={18} style={{ marginRight: '0.5rem' }} />
                             Delete
@@ -294,7 +311,7 @@ const AnimalDetailsPage = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {VACCINATION_RECORDS.map(record => (
+                                    {vaccinationRecords.map(record => (
                                         <tr key={record.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
                                             <td style={{ padding: '0.75rem' }}>{record.vaccine}</td>
                                             <td style={{ padding: '0.75rem' }}>{record.date}</td>
@@ -306,7 +323,7 @@ const AnimalDetailsPage = () => {
                             </table>
                         </div>
                         <div style={{ marginTop: '1.5rem' }}>
-                            <Button variant="primary" onClick={() => handleAddRecord('Vaccination Record')}>
+                            <Button variant="primary" onClick={() => handleAddRecord('vaccination')}>
                                 <Plus size={18} style={{ marginRight: '0.5rem' }} />
                                 Add Vaccination Record
                             </Button>
@@ -328,7 +345,7 @@ const AnimalDetailsPage = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {MEDICATION_RECORDS.map(record => (
+                                    {medicationRecords.map(record => (
                                         <tr key={record.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
                                             <td style={{ padding: '0.75rem' }}>{record.medicine}</td>
                                             <td style={{ padding: '0.75rem' }}>{record.date}</td>
@@ -340,7 +357,7 @@ const AnimalDetailsPage = () => {
                             </table>
                         </div>
                         <div style={{ marginTop: '1.5rem' }}>
-                            <Button variant="primary" onClick={() => handleAddRecord('Medication Record')}>
+                            <Button variant="primary" onClick={() => handleAddRecord('medication')}>
                                 <Plus size={18} style={{ marginRight: '0.5rem' }} />
                                 Add Medication Record
                             </Button>
@@ -361,7 +378,7 @@ const AnimalDetailsPage = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {WEIGHT_RECORDS.map(record => (
+                                    {weightRecords.map(record => (
                                         <tr key={record.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
                                             <td style={{ padding: '0.75rem' }}>{record.date}</td>
                                             <td style={{ padding: '0.75rem' }}>{record.weight}</td>
@@ -372,7 +389,7 @@ const AnimalDetailsPage = () => {
                             </table>
                         </div>
                         <div style={{ marginTop: '1.5rem' }}>
-                            <Button variant="primary" onClick={() => handleAddRecord('Weight Record')}>
+                            <Button variant="primary" onClick={() => handleAddRecord('weight')}>
                                 <Plus size={18} style={{ marginRight: '0.5rem' }} />
                                 Add Weight Record
                             </Button>
@@ -386,15 +403,15 @@ const AnimalDetailsPage = () => {
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
                             <div>
                                 <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>Provider</label>
-                                <p style={{ margin: 0, color: 'var(--color-text-main)' }}>{INSURANCE_DATA.provider}</p>
+                                <p style={{ margin: 0, color: 'var(--color-text-main)' }}>{insuranceData.provider}</p>
                             </div>
                             <div>
                                 <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>Policy Number</label>
-                                <p style={{ margin: 0, color: 'var(--color-text-main)' }}>{INSURANCE_DATA.policyNumber}</p>
+                                <p style={{ margin: 0, color: 'var(--color-text-main)' }}>{insuranceData.policyNumber}</p>
                             </div>
                             <div>
                                 <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>Coverage</label>
-                                <p style={{ margin: 0, color: 'var(--color-text-main)' }}>{INSURANCE_DATA.coverage}</p>
+                                <p style={{ margin: 0, color: 'var(--color-text-main)' }}>{insuranceData.coverage}</p>
                             </div>
                             <div>
                                 <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>Status</label>
@@ -406,20 +423,20 @@ const AnimalDetailsPage = () => {
                                     backgroundColor: 'rgba(34, 197, 94, 0.1)',
                                     color: '#16a34a'
                                 }}>
-                                    {INSURANCE_DATA.status}
+                                    {insuranceData.status}
                                 </span>
                             </div>
                             <div>
                                 <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>Start Date</label>
-                                <p style={{ margin: 0, color: 'var(--color-text-main)' }}>{INSURANCE_DATA.startDate}</p>
+                                <p style={{ margin: 0, color: 'var(--color-text-main)' }}>{insuranceData.startDate}</p>
                             </div>
                             <div>
                                 <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>End Date</label>
-                                <p style={{ margin: 0, color: 'var(--color-text-main)' }}>{INSURANCE_DATA.endDate}</p>
+                                <p style={{ margin: 0, color: 'var(--color-text-main)' }}>{insuranceData.endDate}</p>
                             </div>
                         </div>
                         <div style={{ marginTop: '1.5rem' }}>
-                            <Button variant="primary" onClick={() => handleAddRecord('Insurance')}>
+                            <Button variant="primary" onClick={() => handleAddRecord('insurance')}>
                                 <Plus size={18} style={{ marginRight: '0.5rem' }} />
                                 Add Insurance
                             </Button>
@@ -441,7 +458,7 @@ const AnimalDetailsPage = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {MATING_RECORDS.map(record => (
+                                    {matingRecords.map(record => (
                                         <tr key={record.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
                                             <td style={{ padding: '0.75rem' }}>{record.partner}</td>
                                             <td style={{ padding: '0.75rem' }}>{record.date}</td>
@@ -453,7 +470,7 @@ const AnimalDetailsPage = () => {
                             </table>
                         </div>
                         <div style={{ marginTop: '1.5rem' }}>
-                            <Button variant="primary" onClick={() => handleAddRecord('Mating Record')}>
+                            <Button variant="primary" onClick={() => handleAddRecord('mating')}>
                                 <Plus size={18} style={{ marginRight: '0.5rem' }} />
                                 Add Mating Record
                             </Button>
@@ -475,7 +492,7 @@ const AnimalDetailsPage = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {BREEDING_RECORDS.map(record => (
+                                    {breedingRecords.map(record => (
                                         <tr key={record.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
                                             <td style={{ padding: '0.75rem' }}>{record.femaleTag}</td>
                                             <td style={{ padding: '0.75rem' }}>{record.date}</td>
@@ -487,7 +504,7 @@ const AnimalDetailsPage = () => {
                             </table>
                         </div>
                         <div style={{ marginTop: '1.5rem' }}>
-                            <Button variant="primary" onClick={() => handleAddRecord('Breeding Record')}>
+                            <Button variant="primary" onClick={() => handleAddRecord('breeding')}>
                                 <Plus size={18} style={{ marginRight: '0.5rem' }} />
                                 Add Breeding Record
                             </Button>
@@ -508,7 +525,7 @@ const AnimalDetailsPage = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {MILK_HISTORY.map(record => (
+                                    {milkHistory.map(record => (
                                         <tr key={record.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
                                             <td style={{ padding: '0.75rem' }}>{record.date}</td>
                                             <td style={{ padding: '0.75rem' }}>{record.quantity}</td>
@@ -519,7 +536,7 @@ const AnimalDetailsPage = () => {
                             </table>
                         </div>
                         <div style={{ marginTop: '1.5rem' }}>
-                            <Button variant="primary" onClick={() => handleAddRecord('Milk Record')}>
+                            <Button variant="primary" onClick={() => handleAddRecord('milk')}>
                                 <Plus size={18} style={{ marginRight: '0.5rem' }} />
                                 Add Milk Record
                             </Button>
@@ -527,6 +544,87 @@ const AnimalDetailsPage = () => {
                     </div>
                 )}
             </Card>
+            <AddVaccinationRecordForm
+                isOpen={showAddRecordForm === 'vaccination'}
+                onClose={() => setShowAddRecordForm('')}
+                animalTag={animal.tagId}
+                onSubmit={(formData) => {
+                    const newRecord = { id: Math.max(...vaccinationRecords.map((record) => record.id), 0) + 1, ...formData };
+                    setVaccinationRecords((prev) => [...prev, newRecord]);
+                }}
+            />
+            <AddMedicationRecordForm
+                isOpen={showAddRecordForm === 'medication'}
+                onClose={() => setShowAddRecordForm('')}
+                animalTag={animal.tagId}
+                onSubmit={(formData) => {
+                    const newRecord = { id: Math.max(...medicationRecords.map((record) => record.id), 0) + 1, ...formData };
+                    setMedicationRecords((prev) => [...prev, newRecord]);
+                }}
+            />
+            <AddWeightRecordForm
+                isOpen={showAddRecordForm === 'weight'}
+                onClose={() => setShowAddRecordForm('')}
+                animalTag={animal.tagId}
+                onSubmit={(formData) => {
+                    const newRecord = { id: Math.max(...weightRecords.map((record) => record.id), 0) + 1, ...formData };
+                    setWeightRecords((prev) => [...prev, newRecord]);
+                }}
+            />
+            <AddInsuranceForm
+                isOpen={showAddRecordForm === 'insurance'}
+                onClose={() => setShowAddRecordForm('')}
+                onSubmit={(formData) => {
+                    setInsuranceData((prev) => ({ ...prev, ...formData, status: 'Active' }));
+                }}
+            />
+            <AddMatingRecordForm
+                isOpen={showAddRecordForm === 'mating'}
+                onClose={() => setShowAddRecordForm('')}
+                onSubmit={(formData) => {
+                    const newRecord = {
+                        id: Math.max(...matingRecords.map((record) => record.id), 0) + 1,
+                        partner: formData.partnerTag,
+                        date: formData.date,
+                        status: formData.status,
+                        offspring: formData.expectedOffspring || '-'
+                    };
+                    setMatingRecords((prev) => [...prev, newRecord]);
+                }}
+            />
+            <AddBreedingRecordForm
+                isOpen={showAddRecordForm === 'breeding'}
+                onClose={() => setShowAddRecordForm('')}
+                onSubmit={(formData) => {
+                    const newRecord = { id: Math.max(...breedingRecords.map((record) => record.id), 0) + 1, ...formData };
+                    setBreedingRecords((prev) => [...prev, newRecord]);
+                }}
+            />
+            <AddMilkRecordForm
+                isOpen={showAddRecordForm === 'milk'}
+                onClose={() => setShowAddRecordForm('')}
+                animalTag={animal.tagId}
+                onSubmit={(formData) => {
+                    const newRecord = { id: Math.max(...milkHistory.map((record) => record.id), 0) + 1, ...formData };
+                    setMilkHistory((prev) => [...prev, newRecord]);
+                }}
+            />
+            <EditAnimalForm
+                isOpen={showEditForm}
+                onClose={() => setShowEditForm(false)}
+                animal={animal}
+                onSubmit={(formData) => {
+                    setAnimal((prev) => ({ ...prev, ...formData }));
+                }}
+            />
+            <ChangeStatusForm
+                isOpen={showStatusForm}
+                onClose={() => setShowStatusForm(false)}
+                currentStatus={animal.status}
+                onSubmit={(status) => {
+                    setAnimal((prev) => ({ ...prev, status }));
+                }}
+            />
         </div>
     );
 };

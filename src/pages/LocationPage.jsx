@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
+import AddLocationForm from '../components/forms/AddLocationForm';
 
 const DUMMY_LOCATION = [
     { id: 1, locationName: 'Kidding Shed', locationCode: 'L1', Purpose: 'Newborn kids' },
@@ -12,11 +13,22 @@ const DUMMY_LOCATION = [
 ];
 
 const LocationPage = () => {
+    const [locations, setLocations] = useState(DUMMY_LOCATION);
+    const [showAddForm, setShowAddForm] = useState(false);
+
+    const handleAddLocation = (location) => {
+        const newLocation = {
+            id: Math.max(...locations.map((item) => item.id), 0) + 1,
+            ...location
+        };
+        setLocations((prev) => [...prev, newLocation]);
+    };
+
     return (
         <div className="location-page">
             <div style={{ marginBottom: '1.5rem', borderBottom: '2px solid var(--color-border)', paddingBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h2 style={{ color: 'var(--color-primary)', margin: 0 }}>Locations</h2>
-                <Button variant="primary"><Plus size={18} style={{ marginRight: '0.5rem' }} />Add Location</Button>
+                <Button variant="primary" onClick={() => setShowAddForm(true)}><Plus size={18} style={{ marginRight: '0.5rem' }} />Add Location</Button>
             </div>
             <Card>
                 <div style={{ overflowX: 'auto' }}>
@@ -30,7 +42,7 @@ const LocationPage = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {DUMMY_LOCATION.map((record) => (
+                            {locations.map((record) => (
                                 <tr key={record.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
                                     <td className="sticky-col" style={{ padding: '0.75rem', color: 'var(--color-text-main)', fontWeight: '500' }}>{record.locationName}</td>
                                     <td style={{ padding: '0.75rem', color: 'var(--color-text-main)' }}>{record.locationCode}</td>
@@ -57,6 +69,11 @@ const LocationPage = () => {
                     </table>
                 </div>
             </Card>
+            <AddLocationForm
+                isOpen={showAddForm}
+                onClose={() => setShowAddForm(false)}
+                onSubmit={handleAddLocation}
+            />
         </div>
     );
 };

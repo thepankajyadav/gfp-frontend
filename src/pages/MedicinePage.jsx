@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
+import AddMedicineForm from '../components/forms/AddMedicineForm';
 
 const DUMMY_MEDICINES = [
     { id: 1, name: 'Ivermectin', type: 'Antiparasitic', quantity: 50, expiryDate: '2025-12-31' },
@@ -13,11 +14,22 @@ const DUMMY_MEDICINES = [
 ];
 
 const MedicinePage = () => {
+    const [medicines, setMedicines] = useState(DUMMY_MEDICINES);
+    const [showAddForm, setShowAddForm] = useState(false);
+
+    const handleAddMedicine = (medicine) => {
+        const newMedicine = {
+            id: Math.max(...medicines.map((item) => item.id), 0) + 1,
+            ...medicine
+        };
+        setMedicines((prev) => [...prev, newMedicine]);
+    };
+
     return (
         <div className="medicine-page">
             <div style={{ marginBottom: '1.5rem', borderBottom: '2px solid var(--color-border)', paddingBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h2 style={{ color: 'var(--color-primary)', margin: 0 }}>Medicine Inventory</h2>
-                <Button variant="primary"><Plus size={18} style={{ marginRight: '0.5rem' }} />Add Medicine</Button>
+                <Button variant="primary" onClick={() => setShowAddForm(true)}><Plus size={18} style={{ marginRight: '0.5rem' }} />Add Medicine</Button>
             </div>
             <Card>
                 <div style={{ overflowX: 'auto' }}>
@@ -31,7 +43,7 @@ const MedicinePage = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {DUMMY_MEDICINES.map((medicine) => (
+                            {medicines.map((medicine) => (
                                 <tr key={medicine.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
                                     <td className="sticky-col" style={{ padding: '0.75rem', color: 'var(--color-text-main)', fontWeight: '500' }}>{medicine.name}</td>
                                     <td style={{ padding: '0.75rem', color: 'var(--color-text-main)' }}>{medicine.type}</td>
@@ -43,6 +55,11 @@ const MedicinePage = () => {
                     </table>
                 </div>
             </Card>
+            <AddMedicineForm
+                isOpen={showAddForm}
+                onClose={() => setShowAddForm(false)}
+                onSubmit={handleAddMedicine}
+            />
         </div>
     );
 };

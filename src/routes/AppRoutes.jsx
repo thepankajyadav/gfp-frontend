@@ -18,7 +18,6 @@ import MedicinePage from '../pages/MedicinePage';
 import VaccinesPage from '../pages/VaccinesPage';
 import EmployeePage from '../pages/EmployeePage';
 import BreedingPage from '../pages/BreedingPage';
-import LocationPage from '../pages/LocationPage';
 import AnimalDetailsPage from '../pages/AnimalDetailsPage';
 import ComingSoonPage from '../pages/ComingSoonPage';
 
@@ -60,7 +59,8 @@ const AppRoutes = () => {
                 <Route path="animals" element={<AnimalsPage />} />
                 <Route path="animals/:id" element={<AnimalDetailsPage />} />
                 <Route path="breed" element={<BreedPage />} />
-                <Route path="location" element={<LocationPage />} />
+                <Route path="location" element={<ComingSoonPage />} />
+                <Route path="locations" element={<ComingSoonPage />} />
                 <Route path="medicine" element={<MedicinePage />} />
                 <Route path="vaccines" element={<VaccinesPage />} />
                 <Route path="employee" element={<EmployeePage />} />

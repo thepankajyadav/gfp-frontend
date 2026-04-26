@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
+import AddEmployeeForm from '../components/forms/AddEmployeeForm';
 
 const DUMMY_EMPLOYEES = [
     { id: 1, name: 'Rajesh Kumar', role: 'Farm Manager', phone: '+91 98765 43210', joinDate: '2023-01-15' },
@@ -12,11 +13,22 @@ const DUMMY_EMPLOYEES = [
 ];
 
 const EmployeePage = () => {
+    const [employees, setEmployees] = useState(DUMMY_EMPLOYEES);
+    const [showAddForm, setShowAddForm] = useState(false);
+
+    const handleAddEmployee = (employee) => {
+        const newEmployee = {
+            id: Math.max(...employees.map((item) => item.id), 0) + 1,
+            ...employee
+        };
+        setEmployees((prev) => [...prev, newEmployee]);
+    };
+
     return (
         <div className="employee-page">
             <div style={{ marginBottom: '1.5rem', borderBottom: '2px solid var(--color-border)', paddingBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h2 style={{ color: 'var(--color-primary)', margin: 0 }}>Employee Management</h2>
-                <Button variant="primary"><Plus size={18} style={{ marginRight: '0.5rem' }} />Add Employee</Button>
+                <Button variant="primary" onClick={() => setShowAddForm(true)}><Plus size={18} style={{ marginRight: '0.5rem' }} />Add Employee</Button>
             </div>
             <Card>
                 <div style={{ overflowX: 'auto' }}>
@@ -30,7 +42,7 @@ const EmployeePage = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {DUMMY_EMPLOYEES.map((employee) => (
+                            {employees.map((employee) => (
                                 <tr key={employee.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
                                     <td className="sticky-col" style={{ padding: '0.75rem', color: 'var(--color-text-main)', fontWeight: '500' }}>{employee.name}</td>
                                     <td style={{ padding: '0.75rem', color: 'var(--color-text-main)' }}>{employee.role}</td>
@@ -42,6 +54,11 @@ const EmployeePage = () => {
                     </table>
                 </div>
             </Card>
+            <AddEmployeeForm
+                isOpen={showAddForm}
+                onClose={() => setShowAddForm(false)}
+                onSubmit={handleAddEmployee}
+            />
         </div>
     );
 };

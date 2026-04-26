@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from '../ui/Modal';
 import Button from '../ui/Button';
 
 const ChangeStatusForm = ({ isOpen, onClose, onSubmit, currentStatus }) => {
     const [status, setStatus] = useState(currentStatus || 'Active');
+
+    useEffect(() => {
+        setStatus(currentStatus || 'Active');
+    }, [currentStatus, isOpen]);
 
     const handleSubmit = (e) => {
         e.preventDefault();

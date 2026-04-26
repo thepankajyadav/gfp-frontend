@@ -9,7 +9,8 @@ const Button = ({
     onClick,
     type = 'button',
     disabled = false,
-    className = ''
+    className = '',
+    ...rest
 }) => {
     return (
         <button
@@ -17,6 +18,7 @@ const Button = ({
             className={`btn btn--${variant} btn--${size} ${fullWidth ? 'btn--full' : ''} ${className}`}
             onClick={onClick}
             disabled={disabled}
+            {...rest}
         >
             {children}
         </button>

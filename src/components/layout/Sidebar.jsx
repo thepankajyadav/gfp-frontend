@@ -1,18 +1,16 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Menu, ChevronDown, ChevronRight, X, LogOut, User, Lock, Settings } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import React, { useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { ChevronDown, ChevronRight, LogOut, User, Lock } from 'lucide-react';
 import './Dashboard.css';
 
 const SidebarItem = ({ item, collapsed, onItemClick }) => {
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
     const hasSubmenu = item.submenu && item.submenu.length > 0;
-
-    const toggleSubmenu = (e) => {
-        e.stopPropagation();
-        setIsOpen(!isOpen);
-    };
+    const isActive = item.path
+        ? location.pathname === item.path || location.pathname.startsWith(`${item.path}/`)
+        : false;
 
     const handleClick = () => {
         if (hasSubmenu) {
@@ -26,7 +24,7 @@ const SidebarItem = ({ item, collapsed, onItemClick }) => {
     return (
         <div className="menu-container">
             <div
-                className={`menu-item ${isOpen ? 'active' : ''}`}
+                className={`menu-item ${isOpen || isActive ? 'active' : ''}`}
                 onClick={handleClick}
                 title={collapsed ? item.label : ''}
             >
@@ -63,9 +61,25 @@ const SidebarItem = ({ item, collapsed, onItemClick }) => {
     );
 };
 
-const UserProfile = ({ user, userRole, onSignOut, collapsed, onItemClick }) => {
+const UserProfile = ({ userRole, onSignOut, collapsed, onItemClick }) => {
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
+    const popupRef = useRef(null);
+
+    useEffect(() => {
+        if (!isOpen) {
+            return undefined;
+        }
+
+        const handleOutsideClick = (event) => {
+            if (popupRef.current && !popupRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleOutsideClick);
+        return () => document.removeEventListener('mousedown', handleOutsideClick);
+    }, [isOpen]);
 
     const handleNavigation = (path) => {
         navigate(path);
@@ -75,16 +89,32 @@ const UserProfile = ({ user, userRole, onSignOut, collapsed, onItemClick }) => {
 
     if (collapsed) {
         return (
-            <div className="user-profile collapsed-profile" onClick={() => setIsOpen(!isOpen)}>
-                <div className="profile-pic">
+            <div className="user-profile collapsed-profile" ref={popupRef}>
+                <div className="profile-pic" onClick={() => setIsOpen(!isOpen)}>
                     {userRole ? userRole.charAt(0).toUpperCase() : 'U'}
                 </div>
+                {isOpen && (
+                    <div className="profile-popup">
+                        <div className="popup-item" onClick={() => handleNavigation('/dashboard/profile')}>
+                            <User size={16} /> Profile
+                        </div>
+                        <div className="popup-item" onClick={() => handleNavigation('/dashboard/change-password')}>
+                            <Lock size={16} /> Change Password
+                        </div>
+                        <div className="popup-item upgrade" onClick={() => handleNavigation('/dashboard/settings')}>
+                            Upgrade
+                        </div>
+                        <div className="popup-item danger" onClick={() => { onSignOut(); if (onItemClick) onItemClick(); }}>
+                            <LogOut size={16} /> SIGN OUT
+                        </div>
+                    </div>
+                )}
             </div>
-        )
+        );
     }
 
     return (
-        <div className="user-profile">
+        <div className="user-profile" ref={popupRef}>
             <div className="profile-trigger" onClick={() => setIsOpen(!isOpen)}>
                 <div className="profile-pic">
                     {userRole ? userRole.charAt(0).toUpperCase() : 'U'}
@@ -104,6 +134,9 @@ const UserProfile = ({ user, userRole, onSignOut, collapsed, onItemClick }) => {
                     <div className="popup-item" onClick={() => handleNavigation('/dashboard/change-password')}>
                         <Lock size={16} /> Change Password
                     </div>
+                    <div className="popup-item upgrade" onClick={() => handleNavigation('/dashboard/settings')}>
+                        Upgrade
+                    </div>
                     <div className="popup-item danger" onClick={() => { onSignOut(); if (onItemClick) onItemClick(); }}>
                         <LogOut size={16} /> SIGN OUT
                     </div>
@@ -115,9 +148,7 @@ const UserProfile = ({ user, userRole, onSignOut, collapsed, onItemClick }) => {
 
 const Sidebar = ({
     collapsed,
-    setCollapsed,
     menuItems,
-    user,
     userRole,
     onSignOut,
     mobileOpen,
@@ -159,7 +190,6 @@ const Sidebar = ({
                 </div>
 
                 <UserProfile
-                    user={user}
                     userRole={userRole}
                     onSignOut={onSignOut}
                     collapsed={collapsed}

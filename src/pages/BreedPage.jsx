@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
+import AddBreedForm from '../components/forms/AddBreedForm';
 
 const DUMMY_BREEDS = [
     { id: 1, name: 'Boer', description: 'Meat goat breed', origin: 'South Africa', count: 45 },
@@ -12,11 +13,22 @@ const DUMMY_BREEDS = [
 ];
 
 const BreedPage = () => {
+    const [breeds, setBreeds] = useState(DUMMY_BREEDS);
+    const [showAddForm, setShowAddForm] = useState(false);
+
+    const handleAddBreed = (breed) => {
+        const newBreed = {
+            id: Math.max(...breeds.map((item) => item.id), 0) + 1,
+            ...breed
+        };
+        setBreeds((prev) => [...prev, newBreed]);
+    };
+
     return (
         <div className="breed-page">
             <div style={{ marginBottom: '1.5rem', borderBottom: '2px solid var(--color-border)', paddingBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h2 style={{ color: 'var(--color-primary)', margin: 0 }}>Breed Management</h2>
-                <Button variant="primary"><Plus size={18} style={{ marginRight: '0.5rem' }} />Add New Breed</Button>
+                <Button variant="primary" onClick={() => setShowAddForm(true)}><Plus size={18} style={{ marginRight: '0.5rem' }} />Add New Breed</Button>
             </div>
             <Card>
                 <div style={{ overflowX: 'auto' }}>
@@ -30,7 +42,7 @@ const BreedPage = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {DUMMY_BREEDS.map((breed) => (
+                            {breeds.map((breed) => (
                                 <tr key={breed.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
                                     <td className="sticky-col" style={{ padding: '0.75rem', color: 'var(--color-text-main)', fontWeight: '500' }}>{breed.name}</td>
                                     <td style={{ padding: '0.75rem', color: 'var(--color-text-main)' }}>{breed.description}</td>
@@ -42,6 +54,11 @@ const BreedPage = () => {
                     </table>
                 </div>
             </Card>
+            <AddBreedForm
+                isOpen={showAddForm}
+                onClose={() => setShowAddForm(false)}
+                onSubmit={handleAddBreed}
+            />
         </div>
     );
 };

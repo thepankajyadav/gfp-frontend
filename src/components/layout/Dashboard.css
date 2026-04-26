@@ -366,6 +366,15 @@
     font-size: 0.9rem;
 }
 
+.popup-item.upgrade {
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+.popup-item.upgrade:hover {
+    background-color: color-mix(in srgb, var(--color-primary-light) 20%, white 80%);
+}
+
 .popup-item:hover {
     background-color: var(--color-background);
 }

@@ -67,9 +67,24 @@ const AnimalsPage = () => {
     };
 
     const handleSubmitAnimal = (formData) => {
+        const selectedDate = formData.dob || formData.purchaseDate;
+        const getAgeLabel = (dateValue) => {
+            if (!dateValue) return 'N/A';
+            const today = new Date();
+            const date = new Date(dateValue);
+            let years = today.getFullYear() - date.getFullYear();
+            const monthDiff = today.getMonth() - date.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < date.getDate())) {
+                years -= 1;
+            }
+            if (years <= 0) return 'Less than 1 year';
+            return `${years} year${years > 1 ? 's' : ''}`;
+        };
+
         const newAnimal = {
             id: Math.max(...animals.map(a => a.id), 0) + 1,
-            ...formData
+            ...formData,
+            age: getAgeLabel(selectedDate)
         };
         setAnimals([...animals, newAnimal]);
     };
@@ -81,16 +96,8 @@ const AnimalsPage = () => {
                 <div style={{ display: 'flex', gap: '1rem' }}>
                     {selectedIds.length > 0 && (
                         <Button
-                            variant="primary"
+                            variant="danger"
                             onClick={handleDelete}
-                            style={{
-                                backgroundColor: 'var(--color-danger)',
-                                borderColor: 'var(--color-danger)',
-                                color: 'white',
-                                transition: 'background-color 0.2s'
-                            }}
-                            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--color-danger-hover)'; e.currentTarget.style.borderColor = 'var(--color-danger-hover)'; }}
-                            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'var(--color-danger)'; e.currentTarget.style.borderColor = 'var(--color-danger)'; }}
                         >
                             Delete ({selectedIds.length})
                         </Button>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from '../ui/Modal';
 import Button from '../ui/Button';
 
@@ -12,6 +12,18 @@ const EditAnimalForm = ({ isOpen, onClose, onSubmit, animal }) => {
         dateOfBirth: animal?.dateOfBirth || '',
         color: animal?.color || ''
     });
+
+    useEffect(() => {
+        setFormData({
+            tagId: animal?.tagId || '',
+            breed: animal?.breed || '',
+            gender: animal?.gender || '',
+            age: animal?.age || '',
+            weight: animal?.weight || '',
+            dateOfBirth: animal?.dateOfBirth || '',
+            color: animal?.color || ''
+        });
+    }, [animal, isOpen]);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });

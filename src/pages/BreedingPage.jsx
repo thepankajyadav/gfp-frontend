@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
+import AddBreedingForm from '../components/forms/AddBreedingForm';
 
 const DUMMY_BREEDING = [
     { id: 1, maleTag: 'GT-001', femaleTag: 'GT-002', date: '2025-10-15', status: 'Successful' },
@@ -12,11 +13,22 @@ const DUMMY_BREEDING = [
 ];
 
 const BreedingPage = () => {
+    const [breedingRecords, setBreedingRecords] = useState(DUMMY_BREEDING);
+    const [showAddForm, setShowAddForm] = useState(false);
+
+    const handleAddBreedingRecord = (record) => {
+        const newRecord = {
+            id: Math.max(...breedingRecords.map((item) => item.id), 0) + 1,
+            ...record
+        };
+        setBreedingRecords((prev) => [...prev, newRecord]);
+    };
+
     return (
         <div className="breeding-page">
             <div style={{ marginBottom: '1.5rem', borderBottom: '2px solid var(--color-border)', paddingBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h2 style={{ color: 'var(--color-primary)', margin: 0 }}>Breeding Records</h2>
-                <Button variant="primary"><Plus size={18} style={{ marginRight: '0.5rem' }} />Add Breeding Record</Button>
+                <Button variant="primary" onClick={() => setShowAddForm(true)}><Plus size={18} style={{ marginRight: '0.5rem' }} />Add Breeding Record</Button>
             </div>
             <Card>
                 <div style={{ overflowX: 'auto' }}>
@@ -30,7 +42,7 @@ const BreedingPage = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {DUMMY_BREEDING.map((record) => (
+                            {breedingRecords.map((record) => (
                                 <tr key={record.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
                                     <td className="sticky-col" style={{ padding: '0.75rem', color: 'var(--color-text-main)', fontWeight: '500' }}>{record.maleTag}</td>
                                     <td style={{ padding: '0.75rem', color: 'var(--color-text-main)' }}>{record.femaleTag}</td>
@@ -57,6 +69,11 @@ const BreedingPage = () => {
                     </table>
                 </div>
             </Card>
+            <AddBreedingForm
+                isOpen={showAddForm}
+                onClose={() => setShowAddForm(false)}
+                onSubmit={handleAddBreedingRecord}
+            />
         </div>
     );
 };

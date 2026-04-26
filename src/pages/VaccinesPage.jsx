@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
+import AddVaccineForm from '../components/forms/AddVaccineForm';
 
 const DUMMY_VACCINES = [
     { id: 1, animalTag: 'GT-001', vaccineName: 'CDT Vaccine', date: '2025-11-15', nextDue: '2026-11-15' },
@@ -13,11 +14,22 @@ const DUMMY_VACCINES = [
 ];
 
 const VaccinesPage = () => {
+    const [vaccines, setVaccines] = useState(DUMMY_VACCINES);
+    const [showAddForm, setShowAddForm] = useState(false);
+
+    const handleAddVaccine = (vaccine) => {
+        const newVaccine = {
+            id: Math.max(...vaccines.map((item) => item.id), 0) + 1,
+            ...vaccine
+        };
+        setVaccines((prev) => [...prev, newVaccine]);
+    };
+
     return (
         <div className="vaccines-page">
             <div style={{ marginBottom: '1.5rem', borderBottom: '2px solid var(--color-border)', paddingBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h2 style={{ color: 'var(--color-primary)', margin: 0 }}>Vaccine Records</h2>
-                <Button variant="primary"><Plus size={18} style={{ marginRight: '0.5rem' }} />Add Vaccine Record</Button>
+                <Button variant="primary" onClick={() => setShowAddForm(true)}><Plus size={18} style={{ marginRight: '0.5rem' }} />Add Vaccine Record</Button>
             </div>
             <Card>
                 <div style={{ overflowX: 'auto' }}>
@@ -31,7 +43,7 @@ const VaccinesPage = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {DUMMY_VACCINES.map((vaccine) => (
+                            {vaccines.map((vaccine) => (
                                 <tr key={vaccine.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
                                     <td className="sticky-col" style={{ padding: '0.75rem', color: 'var(--color-text-main)', fontWeight: '500' }}>{vaccine.animalTag}</td>
                                     <td style={{ padding: '0.75rem', color: 'var(--color-text-main)' }}>{vaccine.vaccineName}</td>
@@ -43,6 +55,11 @@ const VaccinesPage = () => {
                     </table>
                 </div>
             </Card>
+            <AddVaccineForm
+                isOpen={showAddForm}
+                onClose={() => setShowAddForm(false)}
+                onSubmit={handleAddVaccine}
+            />
         </div>
     );
 };
